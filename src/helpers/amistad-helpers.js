@@ -1,21 +1,26 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 export default async function toggleSiguiendo(usuario) {
   let usuarioActualizado;
 
   if (usuario.siguiendo) {
-    await Axios.delete(`/api/amistades/${usuario._id}/eliminar`);
+    await Axios.delete(
+      process.env.REACT_APP_URL_BACKEND +
+        `/api/amistades/${usuario._id}/eliminar`
+    );
     usuarioActualizado = {
       ...usuario,
       numSeguidores: usuario.numSeguidores - 1,
-      siguiendo: false
+      siguiendo: false,
     };
   } else {
-    await Axios.post(`/api/amistades/${usuario._id}/seguir`);
+    await Axios.post(
+      process.env.REACT_APP_URL_BACKEND + `/api/amistades/${usuario._id}/seguir`
+    );
     usuarioActualizado = {
       ...usuario,
       numSeguidores: usuario.numSeguidores + 1,
-      siguiendo: true
+      siguiendo: true,
     };
   }
 

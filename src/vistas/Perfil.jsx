@@ -22,9 +22,12 @@ export default function Perfil({ mostrarError, usuario, match, logout }) {
     async function cargarPostsYUsuario() {
       try {
         setCargandoPefil(true);
-        const { data: usuario } = await Axios.get(`/api/usuarios/${username}`);
+        const { data: usuario } = await Axios.get(
+          process.env.REACT_APP_URL_BACKEND + `/api/usuarios/${username}`
+        );
         const { data: posts } = await Axios.get(
-          `/api/posts/usuario/${usuario._id}`
+          process.env.REACT_APP_URL_BACKEND +
+            `/api/posts/usuario/${usuario._id}`
         );
         setUsuarioDueñoDelPerfil(usuario);
         setPosts(posts);
@@ -58,7 +61,11 @@ export default function Perfil({ mostrarError, usuario, match, logout }) {
           "Content-Type": file.type,
         },
       };
-      const { data } = await Axios.post("/api/usuarios/upload", file, config);
+      const { data } = await Axios.post(
+        process.env.REACT_APP_URL_BACKEND + "/api/usuarios/upload",
+        file,
+        config
+      );
       setUsuarioDueñoDelPerfil({ ...usuarioDueñoDelPerfil, imagen: data.url });
       setSubiendoImagen(false);
     } catch (error) {

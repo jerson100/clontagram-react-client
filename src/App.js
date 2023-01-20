@@ -45,7 +45,9 @@ export default function App() {
         return;
       }
       try {
-        const { data: usuario } = await Axios.get("/api/usuarios/whoami");
+        const { data: usuario } = await Axios.get(
+          process.env.REACT_APP_URL_BACKEND + "/api/usuarios/whoami"
+        );
         setUsuario(usuario);
         setcargandoUsuario(false);
       } catch (e) {
@@ -58,10 +60,13 @@ export default function App() {
   }, [mostrarError]);
 
   const login = async (email, password) => {
-    const { data } = await Axios.post("api/usuarios/login", {
-      email,
-      password,
-    });
+    const { data } = await Axios.post(
+      process.env.REACT_APP_URL_BACKEND + "/api/usuarios/login",
+      {
+        email,
+        password,
+      }
+    );
 
     setUsuario(data.usuario);
     setToken(data.token);
@@ -69,7 +74,10 @@ export default function App() {
   };
 
   const signup = async (usuario) => {
-    const { data } = await Axios.post("api/usuarios/signup", usuario);
+    const { data } = await Axios.post(
+      process.env.REACT_APP_URL_BACKEND + "/api/usuarios/signup",
+      usuario
+    );
 
     setUsuario(data.usuario);
     setToken(data.token);

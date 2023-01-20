@@ -1,45 +1,42 @@
-import Axios from 'axios';
+import Axios from "axios";
 // const URL = "localhost:3000/api";
 
-export const getPost = async (fechaUltimoPost=null) => {
+export const getPost = async (fechaUltimoPost = null) => {
+  // const config = {
+  //     headers:  {
+  //         'Content-type': 'application/json'
+  //     }
+  // };
+  const query = fechaUltimoPost ? `?fecha=${fechaUltimoPost}` : "";
+  const response = await Axios.get(
+    process.env.REACT_APP_URL_BACKEND + `/api/posts/feed${query}`
+  );
 
-    // const config = {
-    //     headers:  {
-    //         'Content-type': 'application/json'
-    //     }
-    // };
-    const query = fechaUltimoPost ?  `?fecha=${fechaUltimoPost}`:"";
-    const response = await Axios.get(`/api/posts/feed${query}`);
-    
-    return response.data;
-
+  return response.data;
 };
 
 export const getDetallePost = async (idPost) => {
+  const detalle = await Axios.get(
+    process.env.REACT_APP_URL_BACKEND + `/api/posts/${idPost}`,
+    {}
+  );
 
-    const detalle = await Axios.get(`/api/posts/${idPost}`,{});
-
-    return detalle.data;
-    
+  return detalle.data;
 };
 
-export const comentar = async (post,mensaje,usuario) => {
+export const comentar = async (post, mensaje, usuario) => {
+  const url =
+    process.env.REACT_APP_URL_BACKEND + `/api/posts/${post._id}/comentarios`;
 
-    const url = `/api/posts/${post._id}/comentarios`;
+  const { data: nuevoComentario } = await Axios.post(url, { mensaje });
 
-    const {data: nuevoComentario} = await Axios.post(url,{mensaje});
+  nuevoComentario.usuario = usuario;
 
-    nuevoComentario.usuario = usuario;
+  const postConComentarioActualizado = {
+    ...post,
+    comentarios: [...post.comentarios, nuevoComentario],
+    numComentarios: post.numComentarios + 1,
+  };
 
-    const postConComentarioActualizado = {
-        ...post,
-        comentarios: [
-            ...post.comentarios,
-            nuevoComentario
-        ],
-        numComentarios: post.numComentarios + 1
-    }
-
-    return postConComentarioActualizado;
-
+  return postConComentarioActualizado;
 };

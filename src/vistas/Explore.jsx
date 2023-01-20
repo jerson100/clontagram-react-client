@@ -17,8 +17,12 @@ const Explore = ({ mostrarError }) => {
 
       try {
         const [posts, usuarios] = await Promise.all([
-          Axios.get("/api/posts/explore").then(({ data }) => data),
-          Axios.get("/api/usuarios/explore").then(({ data }) => data),
+          Axios.get(
+            process.env.REACT_APP_URL_BACKEND + "/api/posts/explore"
+          ).then(({ data }) => data),
+          Axios.get(
+            process.env.REACT_APP_URL_BACKEND + "/api/usuarios/explore"
+          ).then(({ data }) => data),
         ]);
         setPosts(posts);
         setUsuarios(usuarios);
